@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "promotion")
@@ -25,10 +27,9 @@ public class Promotion implements Serializable {
     private String desc;
 
     @ManyToOne
-    @JoinColumn(name = "deal_id")
-    private Deal deal;
-
-    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @OneToMany(mappedBy = "promotion")
+    private List<Deal> dealList = new ArrayList<>();
 }

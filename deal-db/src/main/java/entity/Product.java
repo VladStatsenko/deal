@@ -31,9 +31,13 @@ public class Product implements Serializable {
     private List<Promotion> promotionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
-    private List<Currency> currencyList = new ArrayList<>();
+    private List<Deal> dealList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "pt_id")
     private ProductType productType;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
+    private Currency currency;
 }

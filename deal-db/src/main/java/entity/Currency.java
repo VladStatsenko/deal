@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "currency")
@@ -24,9 +26,8 @@ public class Currency implements Serializable {
     @Column(name = "currency_code")
     private String code;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany(mappedBy = "currency")
+    private List<Product> productList = new ArrayList<>();
 
 
 }

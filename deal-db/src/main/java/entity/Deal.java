@@ -27,8 +27,12 @@ public class Deal implements Serializable {
     @Column(name = "deal_sum")
     private int sum;
 
-    @OneToMany(mappedBy = "deal")
-    private List<Promotion> promotionList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "product")
+    private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "promotion")
+    private Product promotion;
 
 }
