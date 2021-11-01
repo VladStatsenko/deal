@@ -1,4 +1,4 @@
-package entity;
+package org.statsenko.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +7,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "deal")
+@Table(schema = "deal",name = "deal")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,11 +26,11 @@ public class Deal implements Serializable {
     private int sum;
 
     @ManyToOne
-    @JoinColumn(name = "product")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "promotion")
-    private Product promotion;
+    @JoinColumn(name = "promotion_id")
+    private Promotion promotion;
 
 }

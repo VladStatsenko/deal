@@ -1,4 +1,4 @@
-package entity;
+package org.statsenko.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "product")
+@Table(schema = "deal",name = "product")
 @Getter
 @Setter
 @NoArgsConstructor

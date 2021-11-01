@@ -1,4 +1,4 @@
-package entity;
+package org.statsenko.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,22 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "product_type")
+@Table(schema = "deal",name = "currency")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductType implements Serializable {
-
-    @Column(name = "pt_id")
+public class Currency implements Serializable {
+    @Column(name = "currency_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "pt_name")
+    @Column(name = "cur_name")
     private String name;
-    @Column(name = "pt_desc")
-    private String desc;
+    @Column(name = "cur_code")
+    private String code;
 
-    @OneToMany(mappedBy = "productType")
+    @OneToMany(mappedBy = "currency")
     private List<Product> productList = new ArrayList<>();
+
+
 }

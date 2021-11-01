@@ -1,4 +1,4 @@
-package entity;
+package org.statsenko.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,25 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "promotion")
+@Table(schema = "deal",name = "product_type")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Promotion implements Serializable {
-    @Column(name = "promotion_id")
+public class ProductType implements Serializable {
+
+    @Column(name = "pt_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "promotion_name")
+    @Column(name = "pt_name")
     private String name;
-    @Column(name = "promotion_desc")
+    @Column(name = "pt_desc")
     private String desc;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @OneToMany(mappedBy = "promotion")
-    private List<Deal> dealList = new ArrayList<>();
+    @OneToMany(mappedBy = "productType")
+    private List<Product> productList = new ArrayList<>();
 }
