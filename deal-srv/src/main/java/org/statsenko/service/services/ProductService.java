@@ -3,8 +3,11 @@ package org.statsenko.service.services;
 import dto.DealDto;
 import dto.ProductDto;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.statsenko.entity.*;
+import org.statsenko.mapper.DealMapper;
+import org.statsenko.mapper.ProductMapper;
 import org.statsenko.repository.*;
 
 import java.util.List;
@@ -14,42 +17,31 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
+    private static final ProductMapper REST_MAPPER = Mappers.getMapper(ProductMapper.class);
+
     private final ProductRepository productRepository;
     private final ProductTypeRepository typeRepository;
     private final CurrencyRepository currencyRepository;
 
     public ProductDto getProductById(int id){
-        ProductDto product = productRepository.findById(id)
-                .map(ProductDto::new).get();
+        ProductDto product = REST_MAPPER.toDto(productRepository.getById(id));
         return product;
     }
 
     public List<ProductDto> getAllProduct(){
-        List<ProductDto> productDtoList = productRepository.findAll()
-                .stream().map(ProductDto::new).collect(Collectors.toList());
+        List<ProductDto> productDtoList = REST_MAPPER.toDtoList(productRepository.findAll());
         return productDtoList;
     }
 
     public ProductDto createProduct(ProductDto productDto){
-        Product product = new Product();
-        product.setName(productDto.getName());
-        product.setDesc(productDto.getDesc());
-        ProductType type = typeRepository.getById(productDto.getTypeId());
-        product.setProductType(type);
-        Currency currency = currencyRepository.getById(productDto.getCurrencyId());
-        product.setCurrency(currency);
+        Product product = REST_MAPPER.toEntity(productDto);
         productRepository.save(product);
         return productDto;
     }
 
     public ProductDto editProduct(ProductDto productDto, int id){
-        Product product = productRepository.findById(id).orElse(null);
-        product.setName(productDto.getName());
-        product.setDesc(productDto.getDesc());
-        ProductType type = typeRepository.getById(productDto.getTypeId());
-        product.setProductType(type);
-        Currency currency = currencyRepository.getById(productDto.getCurrencyId());
-        product.setCurrency(currency);
+        Product product = REST_MAPPER.toEntity(productDto);
+        product.setId(id);
         productRepository.save(product);
         return productDto;
     }

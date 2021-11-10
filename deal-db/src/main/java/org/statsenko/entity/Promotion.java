@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Promotion implements Serializable {
+public class Promotion extends AbstractEntity {
     @Column(name = "promotion_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,31 +1,24 @@
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.statsenko.entity.Deal;
+import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DealDto implements Serializable {
 
     @JsonProperty("deal_date")
-    private Date dealDate;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private LocalDateTime dealDate;
     private Integer sum;
-    @JsonProperty("product_id")
-    private Integer productId;
-    @JsonProperty("promotion_id")
-    private Integer promotionId;
+    private String product;
+    private String promotion;
 
-    public DealDto(Deal deal){
-        this.dealDate = deal.getDealDate();
-        this.sum = deal.getSum();
-        this.productId = deal.getProduct().getId();
-        this.promotionId = deal.getPromotion().getId();
-    }
 }

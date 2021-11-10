@@ -15,11 +15,11 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Deal implements Serializable {
+public class Deal extends AbstractEntity {
     @Column(name = "deal_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int dealId;
+    private int id;
     @Column(name = "deal_date")
     private Date dealDate;
     @Column(name = "deal_sum")

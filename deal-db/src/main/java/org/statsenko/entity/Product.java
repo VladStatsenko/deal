@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product implements Serializable {
+public class Product extends AbstractEntity {
     @Column(name = "product_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
