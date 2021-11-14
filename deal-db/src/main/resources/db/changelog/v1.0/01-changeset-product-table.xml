@@ -1,0 +1,35 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="1" author="Vlad Stastenko">
+        <createTable tableName="product">
+            <column name="product_id" type="bigint"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="product_name" type="varchar(255)" />
+            <column name="product_desc" type="varchar(250)"/>
+            <column name="pt_id" type="int">
+                <constraints foreignKeyName="pt_id"/>
+            </column>
+            <column name="currency_id" type="int">
+                <constraints foreignKeyName="currency_id"/>
+            </column>
+            <column name="created_ts" type="timestamp"/>
+            <column name="updated_ts" type="timestamp"/>
+        </createTable>
+        <createSequence sequenceName="product_id_seq" startValue="1"/>
+        <insert tableName="product">
+            <column name="product_id" value="1"/>
+            <column name="product_name" value="CREDIT CARD"/>
+            <column name="product_desc" value="Credit with 15% per year"/>
+            <column name="pt_id" value="1"/>
+            <column name="currency_id" value="1"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

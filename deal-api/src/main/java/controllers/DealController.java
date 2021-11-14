@@ -23,4 +23,7 @@ public interface DealController {
 
     @DeleteMapping("/{id}")
     ResponseEntity deleteDeal(@PathVariable int id);
+
+    @GetMapping("promotion/{id}")
+    ResponseEntity getAllDealWithPromotion(@PathVariable int id);
 }

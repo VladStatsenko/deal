@@ -1,0 +1,13 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <include file="01-changeset-deal-table.xml" relativeToChangelogFile="true"/>
+    <include file="01-changeset-currency-table.xml" relativeToChangelogFile="true"/>
+    <include file="01-changeset-product-table.xml" relativeToChangelogFile="true"/>
+    <include file="01-changeset-product_type-table.xml" relativeToChangelogFile="true"/>
+    <include file="01-changeset-promotion-table.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

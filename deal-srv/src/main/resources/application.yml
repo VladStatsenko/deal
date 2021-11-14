@@ -3,10 +3,19 @@ spring:
     name: deal
 
 spring.datasource.driver-class-name: org.postgresql.Driver
-spring.datasource.url: jdbc:postgresql://localhost:5432/postgres
+spring.datasource.url: jdbc:postgresql://localhost:5432/postgres?currentSchema=deal?createDatabaseIfNotExist=true
 spring.datasource.username: postgres
 spring.datasource.password: password
 
 spring.jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.hibernate.dll-auto: create
+spring.jpa.hibernate.dll-auto: validate
 spring.jpa.show-sql: true
+
+spring.liquibase:
+  enabled: true
+  drop-first: false
+  parameters:
+    schema: deal
+  default-schema: deal
+  liquibase-schema: deal
+  changeLog: classpath:db/changelog/db.changelog-master.xml

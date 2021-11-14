@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,15 +17,21 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SequenceGenerator(name = "promotion_id_seq", sequenceName = "promotion_id_seq", initialValue = 1, allocationSize = 1)
 public class Promotion extends AbstractEntity {
     @Column(name = "promotion_id")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "promotion_id_seq")
     private int id;
     @Column(name = "promotion_name")
     private String name;
     @Column(name = "promotion_desc")
     private String desc;
+
+    @Column(name = "created_ts")
+    private LocalDateTime createdTs;
+    @Column(name = "updated_ts")
+    private LocalDateTime updatedTs;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

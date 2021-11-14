@@ -41,4 +41,9 @@ public class DealServiceImpl implements DealController {
         dealService.deleteDeal(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity getAllDealWithPromotion(int id) {
+        return ResponseEntity.ok(dealService.getAllDealWithPromotion(id));
+    }
 }

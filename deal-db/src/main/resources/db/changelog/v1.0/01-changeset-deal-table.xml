@@ -1,0 +1,35 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="1" author="Vlad Stastenko">
+        <createTable tableName="deal">
+            <column name="deal_id" type="bigint"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="deal_date" type="datetime" />
+            <column name="deal_sum" type="int"/>
+            <column name="promotion_id" type="int">
+                <constraints foreignKeyName="promotion_id"/>
+            </column>
+            <column name="product_id" type="int">
+                <constraints foreignKeyName="product_id"/>
+            </column>
+            <column name="created_ts" type="timestamp"/>
+            <column name="updated_ts" type="timestamp"/>
+        </createTable>
+        <createSequence sequenceName="deal_id_seq" startValue="1"/>
+        <insert tableName="deal">
+            <column name="deal_id" value="1"/>
+            <column name="deal_date" value="2020-12-12"/>
+            <column name="deal_sum" value="100000"/>
+            <column name="promotion_id" value="1"/>
+            <column name="product_id" value="1"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

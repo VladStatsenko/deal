@@ -1,0 +1,31 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="1" author="Vlad Stastenko">
+        <createTable tableName="promotion">
+            <column name="promotion_id" type="bigint"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="promotion_name" type="varchar(255)" />
+            <column name="promotion_desc" type="varchar(250)"/>
+            <column name="product_id" type="int">
+                <constraints foreignKeyName="product_id"/>
+            </column>
+            <column name="created_ts" type="timestamp"/>
+            <column name="updated_ts" type="timestamp"/>
+        </createTable>
+        <createSequence sequenceName="promotion_id_seq" startValue="1"/>
+        <insert tableName="promotion">
+            <column name="promotion_id" value="1"/>
+            <column name="promotion_name" value="Big sale"/>
+            <column name="promotion_desc" value="Cashback 20%"/>
+            <column name="product_id" value="1"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

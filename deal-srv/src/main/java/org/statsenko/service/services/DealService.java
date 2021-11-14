@@ -55,4 +55,9 @@ public class DealService {
     public void deleteDeal(int id){
         dealRepository.deleteById(id);
     }
+
+    public List<DealDto> getAllDealWithPromotion(int id){
+        List<DealDto> dealDtoList = REST_MAPPER.toDtoList(dealRepository.getAllDealWithPromotion(id));
+        return dealDtoList;
+    }
 }

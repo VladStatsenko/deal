@@ -22,4 +22,7 @@ public interface PromotionController {
 
     @DeleteMapping("/{id}")
     ResponseEntity deletePromotion(@PathVariable int id);
+
+    @GetMapping("product/{id}")
+    ResponseEntity getPromotionByProduct(@PathVariable int id);
 }

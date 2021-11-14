@@ -49,4 +49,9 @@ public class PromotionService {
     public void deletePromotion(int id){
         promotionRepository.deleteById(id);
     }
+
+    public List<PromotionDto> getPromotionByProduct(int id){
+        List<PromotionDto> promotionDtoList = REST_MAPPER.toDtoList(promotionRepository.getPromotionOfProduct(id));
+        return promotionDtoList;
+    }
 }

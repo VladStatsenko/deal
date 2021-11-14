@@ -1,0 +1,29 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+
+    <changeSet id="1" author="Vlad Stastenko">
+        <createTable tableName="currency">
+            <column name="currency_id" type="bigint"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="cur_code" type="varchar(10)" >
+                <constraints unique="true"/>
+            </column>
+            <column name="cur_name" type="varchar(250)"/>
+            <column name="created_ts" type="timestamp"/>
+            <column name="updated_ts" type="timestamp"/>
+        </createTable>
+        <createSequence sequenceName="currency_id_seq" startValue="1"/>
+        <insert tableName="currency">
+            <column name="currency_id" value="1"/>
+            <column name="cur_code" value="RUB"/>
+            <column name="cur_name" value="RUBLES"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

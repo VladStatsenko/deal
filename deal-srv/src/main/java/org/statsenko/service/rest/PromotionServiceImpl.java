@@ -41,4 +41,9 @@ public class PromotionServiceImpl implements PromotionController {
         promotionService.deletePromotion(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity getPromotionByProduct(int id) {
+        return ResponseEntity.ok(promotionService.getPromotionByProduct(id));
+    }
 }
