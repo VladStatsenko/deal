@@ -22,8 +22,6 @@ public class DealService {
     private static final DealMapper REST_MAPPER = Mappers.getMapper(DealMapper.class);
 
     private final DealRepository dealRepository;
-    private final ProductRepository productRepository;
-    private final PromotionRepository promotionRepository;
 
     public DealDto getDealById(int id){
         DealDto deal = REST_MAPPER.toDto(dealRepository.getById(id));

@@ -20,8 +20,6 @@ public class ProductService {
     private static final ProductMapper REST_MAPPER = Mappers.getMapper(ProductMapper.class);
 
     private final ProductRepository productRepository;
-    private final ProductTypeRepository typeRepository;
-    private final CurrencyRepository currencyRepository;
 
     public ProductDto getProductById(int id){
         ProductDto product = REST_MAPPER.toDto(productRepository.getById(id));

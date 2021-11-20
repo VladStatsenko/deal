@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface DealRepository extends JpaRepository<Deal,Integer> {
 
-    @Query(value = "SELECT * FROM Deal d JOIN Promotion p ON d.promotion_id = p.promotion_id WHERE p.promotion_id = :id"
-            ,nativeQuery = true)
-    List<Deal> getAllDealWithPromotion(@Param("id") int id);
+    @Query("SELECT d FROM Deal d LEFT JOIN d.promotion p WHERE p.id = :id")
+    List<Deal> getAllDealWithPromotion(@Param("id") int PromotionId);
 }

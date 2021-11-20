@@ -11,8 +11,7 @@ import java.util.List;
 @Repository
 public interface PromotionRepository extends JpaRepository<Promotion,Integer> {
 
-    @Query(value = "SELECT * FROM Promotion p JOIN Product pr ON p.product_id = pr.product_id WHERE p.product_id = :id",
-    nativeQuery = true)
-    List<Promotion> getPromotionOfProduct(@Param("id") int id);
+    @Query("SELECT p FROM Promotion p LEFT JOIN p.product pr WHERE pr.id = :id")
+    List<Promotion> getPromotionOfProduct(@Param("id") int ProductId);
 
 }
