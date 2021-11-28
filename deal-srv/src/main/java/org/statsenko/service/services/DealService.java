@@ -5,15 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.statsenko.entity.Deal;
-import org.statsenko.entity.Product;
-import org.statsenko.entity.Promotion;
 import org.statsenko.mapper.DealMapper;
 import org.statsenko.repository.DealRepository;
-import org.statsenko.repository.ProductRepository;
-import org.statsenko.repository.PromotionRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -55,7 +50,7 @@ public class DealService {
     }
 
     public List<DealDto> getAllDealWithPromotion(int id){
-        List<DealDto> dealDtoList = REST_MAPPER.toDtoList(dealRepository.getAllDealWithPromotion(id));
+        List<DealDto> dealDtoList = REST_MAPPER.toDtoList(dealRepository.findDealByPromotion(id));
         return dealDtoList;
     }
 }

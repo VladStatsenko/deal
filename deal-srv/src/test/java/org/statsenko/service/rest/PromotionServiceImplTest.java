@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = {PromotionServiceImpl.class, PromotionService.class})
+@ContextConfiguration(classes = {PromotionControllerImpl.class, PromotionService.class})
 @WebMvcTest
 class PromotionServiceImplTest {
 
@@ -121,7 +121,7 @@ class PromotionServiceImplTest {
 
     @Test
     void getPromotionByProduct() throws Exception{
-        Mockito.when(promotionRepository.getPromotionOfProduct(1)).thenReturn(List.of(promotion1));
+        Mockito.when(promotionRepository.findPromotionByProduct(1)).thenReturn(List.of(promotion1));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/promotion/product/1")

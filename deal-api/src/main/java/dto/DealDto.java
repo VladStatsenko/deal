@@ -2,6 +2,7 @@ package dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class DealDto implements Serializable {
 
     @JsonProperty("deal_date")

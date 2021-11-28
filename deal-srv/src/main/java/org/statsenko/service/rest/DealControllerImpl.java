@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class DealServiceImpl implements DealController {
+public class DealControllerImpl implements DealController {
 
     private final DealService dealService;
 

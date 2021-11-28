@@ -1,17 +1,14 @@
 package org.statsenko.service.services;
 
-import dto.DealDto;
 import dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import org.statsenko.entity.*;
-import org.statsenko.mapper.DealMapper;
+import org.statsenko.entity.Product;
 import org.statsenko.mapper.ProductMapper;
-import org.statsenko.repository.*;
+import org.statsenko.repository.ProductRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service

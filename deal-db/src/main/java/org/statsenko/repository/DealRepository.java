@@ -12,5 +12,5 @@ import java.util.List;
 public interface DealRepository extends JpaRepository<Deal,Integer> {
 
     @Query("SELECT d FROM Deal d LEFT JOIN d.promotion p WHERE p.id = :id")
-    List<Deal> getAllDealWithPromotion(@Param("id") int PromotionId);
+    List<Deal> findDealByPromotion(@Param("id") int promotionId);
 }

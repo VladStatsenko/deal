@@ -12,6 +12,6 @@ import java.util.List;
 public interface PromotionRepository extends JpaRepository<Promotion,Integer> {
 
     @Query("SELECT p FROM Promotion p LEFT JOIN p.product pr WHERE pr.id = :id")
-    List<Promotion> getPromotionOfProduct(@Param("id") int ProductId);
+    List<Promotion> findPromotionByProduct(@Param("id") int productId);
 
 }

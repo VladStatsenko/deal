@@ -47,7 +47,7 @@ public class PromotionService {
     }
 
     public List<PromotionDto> getPromotionByProduct(int id){
-        List<PromotionDto> promotionDtoList = REST_MAPPER.toDtoList(promotionRepository.getPromotionOfProduct(id));
+        List<PromotionDto> promotionDtoList = REST_MAPPER.toDtoList(promotionRepository.findPromotionByProduct(id));
         return promotionDtoList;
     }
 }

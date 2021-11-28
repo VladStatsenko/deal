@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class PromotionServiceImpl implements PromotionController {
+public class PromotionControllerImpl implements PromotionController {
 
     private final PromotionService promotionService;
 

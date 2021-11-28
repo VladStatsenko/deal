@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class ProductServiceImpl implements ProductController {
+public class ProductControllerImpl implements ProductController {
 
     private final ProductService productService;
 

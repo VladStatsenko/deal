@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = {DealServiceImpl.class, DealService.class})
+@ContextConfiguration(classes = {DealControllerImpl.class, DealService.class})
 @WebMvcTest
 class DealServiceImplTest {
 
@@ -117,7 +117,7 @@ class DealServiceImplTest {
 
     @Test
     void getAllDealWithPromotion() throws Exception{
-        Mockito.when(dealRepository.getAllDealWithPromotion(1)).thenReturn(List.of(deal1,deal2));
+        Mockito.when(dealRepository.findDealByPromotion(1)).thenReturn(List.of(deal1,deal2));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/deal/promotion/1")
