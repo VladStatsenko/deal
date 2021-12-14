@@ -19,6 +19,14 @@ public class NotificationService {
 
     private final KafkaTemplate<Long, NotificationDto> kafkaTemplate;
 
+    @Value(value = "${kafka.topic.to_bank}")
+    private String greetingTopicName;
+
+    public void send(NotificationDto dto) {
+        log.info("<= sending {}", dto);
+        kafkaTemplate.send(greetingTopicName, dto);
+    }
+
     @KafkaListener(topics = "${kafka.topic.to_analytic}", groupId = "${kafka.consumer.id}",containerFactory = "kafkaListenerContainerFactory")
     public void consume(@Payload NotificationDto dto) {
         log.info("=> consumed {}", dto);
