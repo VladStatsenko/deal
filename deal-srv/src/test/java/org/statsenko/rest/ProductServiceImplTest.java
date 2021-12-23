@@ -1,7 +1,9 @@
-package org.statsenko.service.rest;
+package org.statsenko.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.MessageDto;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.statsenko.entity.Currency;
 import org.statsenko.entity.Product;
 import org.statsenko.entity.ProductType;
-import org.statsenko.repository.ProductRepository;
+import org.statsenko.mapper.ProductMapper;
 import org.statsenko.service.services.ProductService;
 
 import java.util.ArrayList;
@@ -36,8 +38,10 @@ class ProductServiceImplTest {
     @Autowired
     ObjectMapper mapper;
 
+    ProductMapper REST_MAPPER = Mappers.getMapper(ProductMapper.class);
+
     @MockBean
-    ProductRepository productRepository;
+    ProductService productService;
 
     ProductType type1 = new ProductType(1,"DEBIT","debit cards",null,null,null);
     ProductType type2 = new ProductType(2,"CREDIT","credit cards",null,null,null);
@@ -51,7 +55,7 @@ class ProductServiceImplTest {
 
     @Test
     void getAllProduct() throws Exception {
-        Mockito.when(productRepository.findAll()).thenReturn(products);
+        Mockito.when(productService.getAllProduct()).thenReturn(REST_MAPPER.toDtoList(products));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/product")
@@ -64,21 +68,23 @@ class ProductServiceImplTest {
 
     @Test
     void getProductById() throws Exception{
-        Mockito.when(productRepository.getById(product1.getId())).thenReturn(product1);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse(product1);
+        Mockito.when(productService.getProductById(1)).thenReturn(messageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/product/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("CREDIT CARD")))
-                .andExpect(jsonPath("$.desc", is("15%")));
+                .andExpect(jsonPath("$.response.name", is("CREDIT CARD")))
+                .andExpect(jsonPath("$.response.desc", is("15%")));
     }
 
     @Test
     void createProduct() throws Exception{
 
         Product newProduct = new Product(3,"IPOTEKA","ipoteka 6%",null,null,null,null,null,null);
-        Mockito.when(productRepository.save(newProduct)).thenReturn(newProduct);
+        Mockito.when(productService.createProduct(REST_MAPPER.toDto(newProduct))).thenReturn(REST_MAPPER.toDto(newProduct));
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/product")
@@ -95,8 +101,10 @@ class ProductServiceImplTest {
 
     @Test
     void editProduct() throws Exception {
-        Product newProduct = new Product(2,"DEB CARD","cashback 3$",null,null,null,null,null,null);
-        Mockito.when(productRepository.save(newProduct)).thenReturn(newProduct);
+        Product newProduct = new Product(1,"DEB CARD","cashback 3$",null,null,null,null,null,null);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse(newProduct);
+        Mockito.when(productService.editProduct(REST_MAPPER.toDto(newProduct),1 )).thenReturn(messageDto);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .put("/product/1")
@@ -107,13 +115,15 @@ class ProductServiceImplTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",notNullValue()))
-                .andExpect(jsonPath("$.name", is("DEB CARD")))
-                .andExpect(jsonPath("$.desc", is("cashback 3$")));
+                .andExpect(jsonPath("$.response.name", is("DEB CARD")))
+                .andExpect(jsonPath("$.response.desc", is("cashback 3$")));
     }
 
     @Test
     void deleteProduct() throws Exception{
-        Mockito.when(productRepository.getById(product1.getId())).thenReturn(product1);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse("Product deleted");
+        Mockito.when(productService.deleteProduct(1)).thenReturn(messageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/product/1")

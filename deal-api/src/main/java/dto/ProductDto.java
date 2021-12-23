@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto implements Serializable {
+public class ProductDto extends AbstractDto {
 
     private String name;
     private String desc;

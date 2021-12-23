@@ -1,10 +1,8 @@
-package org.statsenko.mapper.system.template;
+package org.statsenko.mapper;
 
 
-import org.mapstruct.MappingTarget;
 import org.statsenko.entity.AbstractEntity;
 
-import javax.persistence.Entity;
 import java.util.List;
 
 public interface ViewMapper <E extends AbstractEntity, D>{

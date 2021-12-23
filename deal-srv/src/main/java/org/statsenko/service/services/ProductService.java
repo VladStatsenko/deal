@@ -1,5 +1,6 @@
 package org.statsenko.service.services;
 
+import dto.MessageDto;
 import dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -21,9 +22,17 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Loggable
-    public ProductDto getProductById(int id){
-        ProductDto product = REST_MAPPER.toDto(productRepository.getById(id));
-        return product;
+    public MessageDto<ProductDto> getProductById(int id){
+        MessageDto message = new MessageDto();
+        if (productRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Product with your ID not found");
+        }
+        else {
+            ProductDto product = REST_MAPPER.toDto(productRepository.getById(id));
+            message.setResponse(product);
+        }
+        return message;
     }
 
     @Loggable
@@ -42,16 +51,33 @@ public class ProductService {
 
     @Loggable
     @Transactional
-    public ProductDto editProduct(ProductDto productDto, int id){
-        Product product = REST_MAPPER.toEntity(productDto);
-        product.setId(id);
-        productRepository.save(product);
-        return productDto;
+    public MessageDto<ProductDto> editProduct(ProductDto productDto, int id){
+        MessageDto message = new MessageDto();
+        if (productRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Product with your ID not found");
+        }
+        else {
+            Product product = REST_MAPPER.toEntity(productDto);
+            product.setId(id);
+            productRepository.save(product);
+            message.setResponse(product);
+        }
+        return message;
     }
 
     @Loggable
     @Transactional
-    public void deleteProduct(int id){
-        productRepository.deleteById(id);
+    public MessageDto deleteProduct(int id){
+        MessageDto message = new MessageDto();
+        if (productRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Product with your ID not found");
+        }
+        else {
+            productRepository.deleteById(id);
+            message.setResponse("Product deleted");
+        }
+        return message;
     }
 }

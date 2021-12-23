@@ -1,7 +1,9 @@
-package org.statsenko.service.rest;
+package org.statsenko.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.MessageDto;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.statsenko.entity.Product;
 import org.statsenko.entity.Promotion;
-import org.statsenko.repository.PromotionRepository;
+import org.statsenko.mapper.PromotionMapper;
 import org.statsenko.service.services.PromotionService;
 
 import java.util.ArrayList;
@@ -35,8 +37,11 @@ class PromotionServiceImplTest {
     @Autowired
     ObjectMapper mapper;
 
+    PromotionMapper REST_MAPPER = Mappers.getMapper(PromotionMapper.class);
+
     @MockBean
-    PromotionRepository promotionRepository;
+    PromotionService promotionService;
+
     Product product = new Product(1,"CREDIT CARD","15%",null,null,null,null,null,null);
 
     Promotion promotion1 = new Promotion(1,"SALE","15%",null,null,product,null);
@@ -48,7 +53,7 @@ class PromotionServiceImplTest {
 
     @Test
     void getAllPromotion() throws Exception {
-        Mockito.when(promotionRepository.findAll()).thenReturn(promotions);
+        Mockito.when(promotionService.getAllPromotion()).thenReturn(REST_MAPPER.toDtoList(promotions));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/promotion")
@@ -61,21 +66,23 @@ class PromotionServiceImplTest {
 
     @Test
     void getPromotionById() throws Exception{
-        Mockito.when(promotionRepository.getById(promotion1.getId())).thenReturn(promotion1);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse(promotion1);
+        Mockito.when(promotionService.getPromotionById(1)).thenReturn(messageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/promotion/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",notNullValue()))
-                .andExpect(jsonPath("$.name", is("SALE")));
+                .andExpect(jsonPath("$.response.name", is("SALE")));
     }
 
     @Test
     void createPromotion() throws Exception{
         Promotion promotion = new Promotion(3,"Free service","30 days",null,null,null,null);
 
-        Mockito.when(promotionRepository.save(promotion)).thenReturn(promotion);
+        Mockito.when(promotionService.createPromotion(REST_MAPPER.toDto(promotion))).thenReturn(REST_MAPPER.toDto(promotion));
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/promotion")
@@ -93,8 +100,9 @@ class PromotionServiceImplTest {
     @Test
     void editPromotion() throws Exception{
         Promotion promotion1 = new Promotion(1,"Free service","30 days",null,null,null,null);
-
-        Mockito.when(promotionRepository.save(promotion1)).thenReturn(promotion1);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse(promotion1);
+        Mockito.when(promotionService.editPromotion(REST_MAPPER.toDto(promotion1),1 )).thenReturn(messageDto);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .put("/promotion/1")
@@ -105,13 +113,15 @@ class PromotionServiceImplTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",notNullValue()))
-                .andExpect(jsonPath("$.name", is("Free service")))
-                .andExpect(jsonPath("$.desc", is("30 days")));
+                .andExpect(jsonPath("$.response.name", is("Free service")))
+                .andExpect(jsonPath("$.response.desc", is("30 days")));
     }
 
     @Test
     void deletePromotion() throws Exception{
-        Mockito.when(promotionRepository.getById(promotion1.getId())).thenReturn(promotion1);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse("Promotion deleted");
+        Mockito.when(promotionService.deletePromotion(1)).thenReturn(messageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/promotion/1")
@@ -121,13 +131,14 @@ class PromotionServiceImplTest {
 
     @Test
     void getPromotionByProduct() throws Exception{
-        Mockito.when(promotionRepository.findPromotionByProduct(1)).thenReturn(List.of(promotion1));
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse(List.of(promotion1));
+        Mockito.when(promotionService.getPromotionByProduct(1)).thenReturn(messageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/promotion/product/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$",hasSize(1)))
-                .andExpect(jsonPath("$[0].name", is("SALE")));
+                .andExpect(jsonPath("$.response[0].name", is("SALE")));
     }
 }

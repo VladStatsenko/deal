@@ -10,5 +10,5 @@ import java.io.Serializable;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Getter
-public class AbstractEntity implements Serializable {
+public abstract class AbstractEntity implements Serializable {
 }

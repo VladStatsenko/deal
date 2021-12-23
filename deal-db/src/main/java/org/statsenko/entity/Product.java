@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,7 +35,8 @@ public class Product extends AbstractEntity {
     private LocalDateTime updatedTs;
 
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Promotion> promotionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")

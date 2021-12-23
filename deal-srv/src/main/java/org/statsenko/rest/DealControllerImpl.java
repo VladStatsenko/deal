@@ -1,4 +1,4 @@
-package org.statsenko.service.rest;
+package org.statsenko.rest;
 
 import controllers.DealController;
 import dto.DealDto;

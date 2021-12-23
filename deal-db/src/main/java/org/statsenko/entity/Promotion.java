@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class Promotion extends AbstractEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(mappedBy = "promotion")
+    @OneToMany(mappedBy = "promotion",orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Deal> dealList = new ArrayList<>();
 }

@@ -3,9 +3,7 @@ package org.statsenko.mapper;
 import dto.PromotionDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.statsenko.entity.Promotion;
-import org.statsenko.mapper.system.template.ViewMapper;
 
 import java.util.List;
 

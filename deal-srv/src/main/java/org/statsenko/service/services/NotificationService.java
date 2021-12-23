@@ -1,6 +1,5 @@
 package org.statsenko.service.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.NotificationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

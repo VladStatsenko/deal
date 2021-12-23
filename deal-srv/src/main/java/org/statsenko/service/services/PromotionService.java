@@ -1,5 +1,6 @@
 package org.statsenko.service.services;
 
+import dto.MessageDto;
 import dto.PromotionDto;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -21,10 +22,17 @@ public class PromotionService {
     private final PromotionRepository promotionRepository;
 
     @Loggable
-    public PromotionDto getPromotionById(int id){
-
-        PromotionDto promotion = REST_MAPPER.toDto(promotionRepository.getById(id));
-        return promotion;
+    public MessageDto<PromotionDto> getPromotionById(int id){
+        MessageDto message = new MessageDto();
+        if (promotionRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Promotion with your ID not found");
+        }
+        else {
+            PromotionDto promotion = REST_MAPPER.toDto(promotionRepository.getById(id));
+            message.setResponse(promotion);
+        }
+        return message;
     }
 
     @Loggable
@@ -43,22 +51,47 @@ public class PromotionService {
 
     @Loggable
     @Transactional
-    public PromotionDto editPromotion(PromotionDto promotionDto, int id){
-        Promotion promotion = REST_MAPPER.toEntity(promotionDto);
-        promotion.setId(id);
-        promotionRepository.save(promotion);
-        return promotionDto;
+    public MessageDto<PromotionDto> editPromotion(PromotionDto promotionDto, int id){
+        MessageDto message = new MessageDto();
+        if (promotionRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Promotion with your ID not found");
+        }
+        else {
+            Promotion promotion = REST_MAPPER.toEntity(promotionDto);
+            promotion.setId(id);
+            promotionRepository.save(promotion);
+            message.setResponse(promotion);
+        }
+        return message;
     }
 
     @Loggable
     @Transactional
-    public void deletePromotion(int id){
-        promotionRepository.deleteById(id);
+    public MessageDto deletePromotion(int id){
+        MessageDto message = new MessageDto();
+        if (promotionRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Promotion with your ID not found");
+        }
+        else {
+            promotionRepository.deleteById(id);
+            message.setResponse("Promotion deleted");
+        }
+        return message;
     }
 
     @Loggable
-    public List<PromotionDto> getPromotionByProduct(int id){
-        List<PromotionDto> promotionDtoList = REST_MAPPER.toDtoList(promotionRepository.findPromotionByProduct(id));
-        return promotionDtoList;
+    public MessageDto<List<PromotionDto>> getPromotionByProduct(int id){
+        MessageDto message = new MessageDto();
+        if (promotionRepository.findPromotionByProduct(id).isEmpty()){
+            message.setExceptionName("Not found");
+            message.setDescription("Product with your ID not found");
+        }
+        else {
+            List<PromotionDto> promotionDtoList = REST_MAPPER.toDtoList(promotionRepository.findPromotionByProduct(id));
+            message.setResponse(promotionDtoList);
+        }
+        return message;
     }
 }

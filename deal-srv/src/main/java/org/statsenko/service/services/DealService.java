@@ -1,6 +1,7 @@
 package org.statsenko.service.services;
 
 import dto.DealDto;
+import dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,17 @@ public class DealService {
     private final DealRepository dealRepository;
 
     @Loggable
-    public DealDto getDealById(int id){
-        DealDto deal = REST_MAPPER.toDto(dealRepository.getById(id));
-        return deal;
+    public MessageDto<DealDto> getDealById(int id){
+        MessageDto message = new MessageDto();
+        if (dealRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Deal with your ID not found");
+        }
+        else {
+            DealDto deal = REST_MAPPER.toDto(dealRepository.getById(id));
+            message.setResponse(deal);
+        }
+        return message;
     }
 
     @Loggable
@@ -44,24 +53,48 @@ public class DealService {
 
     @Loggable
     @Transactional
-    public DealDto editDeal(DealDto dealDto, int id){
+    public MessageDto<DealDto> editDeal(DealDto dealDto, int id){
+        MessageDto message = new MessageDto();
+        if (dealRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Deal with your ID not found");
+        }
+        else {
+            Deal deal = REST_MAPPER.toEntity(dealDto);
+            deal.setId(id);
 
-        Deal deal = REST_MAPPER.toEntity(dealDto);
-        deal.setId(id);
-
-        dealRepository.save(deal);
-        return dealDto;
+            dealRepository.save(deal);
+            message.setResponse(deal);
+        }
+        return message;
     }
 
     @Loggable
     @Transactional
-    public void deleteDeal(int id){
-        dealRepository.deleteById(id);
+    public MessageDto deleteDeal(int id){
+        MessageDto message = new MessageDto();
+        if (dealRepository.findById(id).orElse(null)==null){
+            message.setExceptionName("Not found");
+            message.setDescription("Deal with your ID not found");
+        }
+        else {
+            dealRepository.deleteById(id);
+            message.setResponse("Deal deleted");
+        }
+        return message;
     }
 
     @Loggable
-    public List<DealDto> getAllDealWithPromotion(int id){
-        List<DealDto> dealDtoList = REST_MAPPER.toDtoList(dealRepository.findDealByPromotion(id));
-        return dealDtoList;
+    public MessageDto<List<DealDto>> getAllDealWithPromotion(int id){
+        MessageDto message = new MessageDto();
+        if (dealRepository.findDealByPromotion(id).isEmpty()){
+            message.setExceptionName("Not found");
+            message.setDescription("Promotion with your ID not found");
+        }
+        else {
+            List<DealDto> dealDtoList = REST_MAPPER.toDtoList(dealRepository.findDealByPromotion(id));
+            message.setResponse(dealDtoList);
+        }
+        return message;
     }
 }

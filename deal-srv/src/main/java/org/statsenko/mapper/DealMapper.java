@@ -4,7 +4,6 @@ import dto.DealDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.statsenko.entity.Deal;
-import org.statsenko.mapper.system.template.ViewMapper;
 
 import java.util.List;
 

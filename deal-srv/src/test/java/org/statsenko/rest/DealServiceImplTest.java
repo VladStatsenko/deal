@@ -1,7 +1,9 @@
-package org.statsenko.service.rest;
+package org.statsenko.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.MessageDto;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.statsenko.entity.Deal;
 import org.statsenko.entity.Promotion;
-import org.statsenko.repository.DealRepository;
+import org.statsenko.mapper.DealMapper;
 import org.statsenko.service.services.DealService;
 
 import java.util.ArrayList;
@@ -35,8 +37,10 @@ class DealServiceImplTest {
     @Autowired
     ObjectMapper mapper;
 
+    DealMapper REST_MAPPER = Mappers.getMapper(DealMapper.class);
+
     @MockBean
-    DealRepository dealRepository;
+    DealService dealService;
 
     Deal deal1 = new Deal(1,null,1000,null,null,null,null);
     Deal deal2 = new Deal(2,null,2000,null,null,null,null);
@@ -47,7 +51,7 @@ class DealServiceImplTest {
 
     @Test
     void getAllDeal() throws Exception{
-        Mockito.when(dealRepository.findAll()).thenReturn(deals);
+        Mockito.when(dealService.getAllDeal()).thenReturn(REST_MAPPER.toDtoList(deals));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/deal")
@@ -59,21 +63,23 @@ class DealServiceImplTest {
 
     @Test
     void getDealById() throws Exception{
-        Mockito.when(dealRepository.getById(deal1.getId())).thenReturn((deal1));
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse(deal1);
+        Mockito.when(dealService.getDealById(1)).thenReturn(messageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/deal/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",notNullValue()))
-                .andExpect(jsonPath("$.sum", is(1000)));
+                .andExpect(jsonPath("$.response.sum", is(1000)));
     }
 
     @Test
     void createDeal() throws Exception {
         Deal newDeal = new Deal(3,null,3000,null,null,null,null);
 
-        Mockito.when(dealRepository.save(newDeal)).thenReturn(newDeal);
+        Mockito.when(dealService.createDeal(REST_MAPPER.toDto(newDeal))).thenReturn(REST_MAPPER.toDto(newDeal));
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .post("/deal")
@@ -89,9 +95,10 @@ class DealServiceImplTest {
 
     @Test
     void editDeal() throws Exception{
-        Deal newDeal = new Deal(3,null,4000,null,null,null,null);
-
-        Mockito.when(dealRepository.save(newDeal)).thenReturn(newDeal);
+        Deal newDeal = new Deal(1,null,4000,null,null,null,null);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse(newDeal);
+        Mockito.when(dealService.editDeal(REST_MAPPER.toDto(newDeal),1 )).thenReturn(messageDto);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .put("/deal/1")
@@ -102,12 +109,14 @@ class DealServiceImplTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",notNullValue()))
-                .andExpect(jsonPath("$.sum", is(4000)));
+                .andExpect(jsonPath("$.response.sum", is(4000)));
     }
 
     @Test
     void deleteDeal() throws Exception {
-        Mockito.when(dealRepository.getById(deal1.getId())).thenReturn(deal1);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse("Deal deleted");
+        Mockito.when(dealService.deleteDeal(1)).thenReturn(messageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/deal/1")
@@ -117,15 +126,16 @@ class DealServiceImplTest {
 
     @Test
     void getAllDealWithPromotion() throws Exception{
-        Mockito.when(dealRepository.findDealByPromotion(1)).thenReturn(List.of(deal1,deal2));
+        MessageDto messageDto = new MessageDto();
+        messageDto.setResponse(List.of(deal1,deal2));
+        Mockito.when(dealService.getAllDealWithPromotion(1)).thenReturn(messageDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/deal/promotion/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",notNullValue()))
-                .andExpect(jsonPath("$",hasSize(2)))
-                .andExpect(jsonPath("$[0].sum", is(1000)))
-                .andExpect(jsonPath("$[1].sum", is(2000)));
+                .andExpect(jsonPath("$.response[0].sum", is(1000)))
+                .andExpect(jsonPath("$.response[1].sum", is(2000)));
     }
 }
